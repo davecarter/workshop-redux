@@ -7,27 +7,26 @@ import { increment, decrement } from './dispatcher/index.jsx'
 const accent = {color: '#F00'}
 
 export default class App extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      count: 0
-    }
-    store.subscribe(() => {
-      this.setState({count: store.getState()})
-    })
-  }
+  render () {
+    const { handleIncrement, handleDecrement, counterValue } = this.props
 
-  render () {  
     return (
       <div>
-        <h1>Current Store State: <span style={accent}>{this.state.count}</span></h1>
-        <Button action={increment} label='Increment +'/>
-        <Button action={decrement} label='Decrement -'/>
+        <h1>Current Store State: <span style={accent}>{counterValue}</span></h1>
+        <Button action={handleIncrement} label='Increment +'/>
+        <Button action={handleDecrement} label='Decrement -'/>
       </div>
     )
   }
 }
 
-ReactDOM.render(<App />,
-  document.getElementById('app')
+const render = () => ReactDOM.render(
+  <App
+    counterValue={store.getState()}
+    handleIncrement={increment}
+    handleDecrement={decrement}
+  />, document.getElementById('app')
 )
+
+render()
+store.subscribe(render)
